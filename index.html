@@ -4,118 +4,578 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kairo App Labs — Next-Generation Software & Edge AI Systems</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0b0f19;
-      color: #f8fafc;
-      margin: 0;
-      padding: 24px 16px;
-      line-height: 1.6;
+  
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              900: '#0c4a6e',
+              glow: '#00d2ff'
+            },
+            dark: {
+              bg: '#070a12',
+              card: '#111827',
+              border: '#1f2937',
+              accent: '#1e293b'
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'glow-pulse': 'glow 3s infinite alternate',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            glow: {
+              '0%': { opacity: '0.4', filter: 'blur(40px)' },
+              '100%': { opacity: '0.8', filter: 'blur(60px)' },
+            }
+          }
+        }
+      }
     }
-    .container { max-width: 640px; margin: 0 auto; }
-    header { text-align: center; padding: 20px 0 30px; }
-    h1 { font-size: 2rem; margin-bottom: 8px; color: #38bdf8; letter-spacing: -0.5px; }
-    .tagline { color: #94a3b8; font-size: 1rem; margin-top: 0; }
-    
-    .section-title {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: #64748b;
-      margin: 28px 0 12px 4px;
-      font-weight: 700;
+  </script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    /* Native Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
     }
 
-    .card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 16px;
-      transition: border-color 0.2s ease;
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
-    .card:hover {
-      border-color: #0284c7;
+    ::-webkit-scrollbar-track {
+      background: #070a12;
     }
-    .card h2 { margin: 0 0 4px; font-size: 1.25rem; color: #f1f5f9; }
-    .card-subtitle { color: #38bdf8; font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; }
-    .badge {
-      display: inline-block;
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
       background: #0284c7;
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 999px;
-      margin-bottom: 10px;
     }
-    .badge.b2b {
-      background: #0d9488;
+
+    /* Backdrop Glassmorphism Effects */
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .card p { margin: 0 0 12px; color: #cbd5e1; font-size: 0.95rem; }
-    .links { margin-top: 12px; display: flex; gap: 14px; flex-wrap: wrap; }
-    a { color: #38bdf8; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
-    a:hover { text-decoration: underline; }
-    footer { text-align: center; margin-top: 40px; color: #64748b; font-size: 0.85rem; padding-top: 20px; border-top: 1px solid #1e293b; }
+    .glass-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 12px 40px -10px rgba(14, 165, 233, 0.15);
+    }
+
+    .glass-nav {
+      background: rgba(7, 10, 18, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Glowing orb backgrounds */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(10px);
+    }
   </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Kairo App Labs</h1>
-      <p class="tagline">Zero lag. Total privacy. Infinite power. — Offline-First Edge AI &amp; Smart Productivity Apps for Android.</p>
+<body class="bg-dark-bg text-slate-100 font-sans antialiased min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+  <!-- Background Ambient Glow Orbs -->
+  <div class="orb w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-brand-600/20 top-[-100px] left-[-100px] animate-glow-pulse"></div>
+  <div class="orb w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] bg-purple-600/15 top-[40%] right-[-100px] animate-glow-pulse" style="animation-delay: 1.5s;"></div>
+  <div class="orb w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-emerald-600/10 bottom-[-100px] left-[20%] animate-glow-pulse" style="animation-delay: 3s;"></div>
+
+  <div class="relative z-10 flex-grow">
+    
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+            <i class="fa-solid fa-cube text-dark-bg text-lg font-black"></i>
+          </div>
+          <div>
+            <span class="font-extrabold text-lg sm:text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">Kairo App Labs</span>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <button id="shareButton" onclick="shareWebsite()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-dark-card border border-dark-border text-slate-300 hover:text-brand-400 hover:border-brand-500/50 transition-all duration-200 flex items-center space-x-2">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span class="hidden sm:inline">Share</span>
+          </button>
+          <a href="#contact-section" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 transition-all duration-200">
+            Contact
+          </a>
+        </div>
+      </div>
     </header>
 
-    <div class="section-title">Consumer &amp; SaaS Products</div>
-
-    <div class="card">
-      <span class="badge">Launching March 2027</span>
-      <h2>Kairo AI Assistant</h2>
-      <div class="card-subtitle">Zero lag. Total privacy. Infinite power.</div>
-      <p>Kairo AI delivers lightning-fast responses, lock-screen voice interaction, and smart screen intelligence (Kairo Lens) right from your pocket. Powered by our Hybrid Engine (Edge Core + Cloud Boost), Kairo processes your everyday commands locally on your device for zero-latency execution and military-grade privacy—seamlessly boosting to cloud intelligence whenever you need deep web research or advanced web tasks.</p>
-      <div class="links">
-        <a href="kairo-privacy.html">Privacy Policy</a>
+    <!-- Main Hero Section -->
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-8 sm:pt-20 sm:pb-12 text-center">
+      
+      <!-- Launch Pill Tag -->
+      <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs sm:text-sm font-medium mb-6 animate-pulse-slow">
+        <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+        <span>Architecting On-Device Intelligence</span>
       </div>
-    </div>
 
-    <div class="card">
-      <span class="badge">Launching Early 2027</span>
-      <h2>Nyaya Shield</h2>
-      <div class="card-subtitle">Your Personal Legal Safety &amp; Emergency Shield.</div>
-      <p>Nyaya Shield is an all-in-one legal safety ecosystem providing instant offline emergency SOS alerts, one-tap call routing, verified lawyer and organization directories, and breaking legal updates powered by AI assistance.</p>
-      <div class="links">
-        <a href="nyayshield-privacy.html">Privacy Policy</a>
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        Next-Generation Software &amp; <br class="hidden sm:inline" />
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-sky-300 to-indigo-400">Edge AI Systems</span>
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed font-normal mb-8">
+        <span class="text-slate-200 font-semibold">Zero lag. Total privacy. Infinite power.</span><br />
+        Offline-First Edge AI &amp; Smart Productivity Apps engineered for Android and Enterprise.
+      </p>
+
+      <!-- Key Tech Pillars Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto text-left mb-12">
+        <div class="p-3 rounded-xl bg-dark-card/50 border border-dark-border/60">
+          <div class="text-brand-400 mb-1 text-sm"><i class="fa-solid fa-microchip"></i> 100% On-Device</div>
+          <div class="text-xs text-slate-400">Zero latency execution</div>
+        </div>
+        <div class="p-3 rounded-xl bg-dark-card/50 border border-dark-border/60">
+          <div class="text-emerald-400 mb-1 text-sm"><i class="fa-solid fa-user-shield"></i> Privacy Core</div>
+          <div class="text-xs text-slate-400">Local compute model</div>
+        </div>
+        <div class="p-3 rounded-xl bg-dark-card/50 border border-dark-border/60">
+          <div class="text-purple-400 mb-1 text-sm"><i class="fa-solid fa-bolt"></i> Hybrid Boost</div>
+          <div class="text-xs text-slate-400">Cloud when required</div>
+        </div>
+        <div class="p-3 rounded-xl bg-dark-card/50 border border-dark-border/60">
+          <div class="text-amber-400 mb-1 text-sm"><i class="fa-solid fa-mobile-screen"></i> Android Native</div>
+          <div class="text-xs text-slate-400">System level integration</div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <span class="badge">Coming Soon</span>
-      <h2>Homework Helper</h2>
-      <div class="card-subtitle">Smart Academic Management &amp; Effortless Learning.</div>
-      <p>Homework Helper empowers students and teachers with structured assignment tracking, note organization, and seamless productivity tools designed to make study workflows fast, focused, and organized.</p>
-      <div class="links">
-        <a href="homework-privacy.html">Privacy Policy</a>
+      <!-- Tab Filter Control -->
+      <div class="flex items-center justify-center space-x-2 p-1.5 rounded-2xl bg-dark-card/80 border border-dark-border max-w-xs sm:max-w-md mx-auto mb-10">
+        <button onclick="filterProducts('all')" id="tab-all" class="tab-btn flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 bg-brand-600 text-white shadow">
+          All Apps
+        </button>
+        <button onclick="filterProducts('saas')" id="tab-saas" class="tab-btn flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition-all duration-200">
+          Consumer SaaS
+        </button>
+        <button onclick="filterProducts('b2b')" id="tab-b2b" class="tab-btn flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition-all duration-200">
+          B2B Enterprise
+        </button>
       </div>
-    </div>
+    </section>
 
-    <div class="section-title">B2B Enterprise Solutions</div>
+    <!-- Product Showcase Grid -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
+      <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-    <div class="card">
-      <span class="badge b2b">Enterprise Utility</span>
-      <h2>SmartUtilityApp</h2>
-      <div class="card-subtitle">Essential Tools &amp; Smart Automation in One App.</div>
-      <p>SmartUtilityApp simplifies your daily digital tasks with a powerful suite of smart utilities, real-time backend alerts, and automated device tools engineered for maximum efficiency.</p>
-      <div class="links">
-        <a href="smartutility-privacy.html">Privacy Policy</a>
+        <!-- Card 1: Kairo AI Assistant -->
+        <div data-category="saas" class="product-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-400 border border-brand-500/30">
+                <i class="fa-solid fa-rocket mr-1.5 text-[10px]"></i> Launching March 2027
+              </span>
+              <span class="text-xs font-mono text-slate-500">v1.0-alpha</span>
+            </div>
+            
+            <div class="flex items-center space-x-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400">
+                <i class="fa-solid fa-brain text-xl"></i>
+              </div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Kairo AI Assistant</h2>
+            </div>
+
+            <p class="text-brand-400 text-xs font-semibold mb-3">Zero lag. Total privacy. Infinite power.</p>
+            
+            <p class="text-slate-300 text-sm leading-relaxed mb-6 line-clamp-4">
+              Kairo AI delivers lightning-fast responses, lock-screen voice interaction, and smart screen intelligence (Kairo Lens) right from your pocket. Powered by our Hybrid Engine (Edge Core + Cloud Boost), Kairo processes your everyday commands locally for zero-latency execution.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-dark-border flex items-center justify-between">
+            <a href="kairo-privacy.html" class="text-xs font-semibold text-slate-400 hover:text-brand-400 transition-colors flex items-center space-x-1">
+              <i class="fa-solid fa-shield-halved text-[11px]"></i>
+              <span>Privacy Policy</span>
+            </a>
+            <button onclick="openModal('kairo')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-dark-accent hover:bg-brand-600 hover:text-white text-brand-400 transition-all flex items-center space-x-1">
+              <span>Details</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: Nyaya Shield -->
+        <div data-category="saas" class="product-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                <i class="fa-solid fa-clock mr-1.5 text-[10px]"></i> Launching Early 2027
+              </span>
+              <span class="text-xs font-mono text-slate-500">Legal Tech</span>
+            </div>
+            
+            <div class="flex items-center space-x-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <i class="fa-solid fa-scale-balanced text-xl"></i>
+              </div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Nyaya Shield</h2>
+            </div>
+
+            <p class="text-emerald-400 text-xs font-semibold mb-3">Your Personal Legal Safety &amp; Emergency Shield.</p>
+            
+            <p class="text-slate-300 text-sm leading-relaxed mb-6 line-clamp-4">
+              Nyaya Shield is an all-in-one legal safety ecosystem providing instant offline emergency SOS alerts, one-tap call routing, verified lawyer and organization directories, and breaking legal updates powered by AI assistance.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-dark-border flex items-center justify-between">
+            <a href="nyayshield-privacy.html" class="text-xs font-semibold text-slate-400 hover:text-emerald-400 transition-colors flex items-center space-x-1">
+              <i class="fa-solid fa-shield-halved text-[11px]"></i>
+              <span>Privacy Policy</span>
+            </a>
+            <button onclick="openModal('nyayshield')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-dark-accent hover:bg-emerald-600 hover:text-white text-emerald-400 transition-all flex items-center space-x-1">
+              <span>Details</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3: Homework Helper -->
+        <div data-category="saas" class="product-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                <i class="fa-solid fa-hourglass-start mr-1.5 text-[10px]"></i> Coming Soon
+              </span>
+              <span class="text-xs font-mono text-slate-500">EdTech</span>
+            </div>
+            
+            <div class="flex items-center space-x-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                <i class="fa-solid fa-graduation-cap text-xl"></i>
+              </div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Homework Helper</h2>
+            </div>
+
+            <p class="text-indigo-400 text-xs font-semibold mb-3">Smart Academic Management &amp; Effortless Learning.</p>
+            
+            <p class="text-slate-300 text-sm leading-relaxed mb-6 line-clamp-4">
+              Homework Helper empowers students and teachers with structured assignment tracking, note organization, and seamless productivity tools designed to make study workflows fast, focused, and organized.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-dark-border flex items-center justify-between">
+            <a href="homework-privacy.html" class="text-xs font-semibold text-slate-400 hover:text-indigo-400 transition-colors flex items-center space-x-1">
+              <i class="fa-solid fa-shield-halved text-[11px]"></i>
+              <span>Privacy Policy</span>
+            </a>
+            <button onclick="openModal('homework')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-dark-accent hover:bg-indigo-600 hover:text-white text-indigo-400 transition-all flex items-center space-x-1">
+              <span>Details</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 4: SmartUtilityApp -->
+        <div data-category="b2b" class="product-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-teal-500/20 text-teal-400 border border-teal-500/30">
+                <i class="fa-solid fa-building-gear mr-1.5 text-[10px]"></i> Enterprise Utility
+              </span>
+              <span class="text-xs font-mono text-slate-500">B2B Platform</span>
+            </div>
+            
+            <div class="flex items-center space-x-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+                <i class="fa-solid fa-gears text-xl"></i>
+              </div>
+              <h2 class="text-xl font-bold text-white tracking-tight">SmartUtilityApp</h2>
+            </div>
+
+            <p class="text-teal-400 text-xs font-semibold mb-3">Essential Tools &amp; Smart Automation in One App.</p>
+            
+            <p class="text-slate-300 text-sm leading-relaxed mb-6 line-clamp-4">
+              SmartUtilityApp simplifies daily operational and digital tasks with a powerful suite of smart utilities, real-time backend alerts, and automated device tools engineered for maximum operational efficiency.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-dark-border flex items-center justify-between">
+            <a href="smartutility-privacy.html" class="text-xs font-semibold text-slate-400 hover:text-teal-400 transition-colors flex items-center space-x-1">
+              <i class="fa-solid fa-shield-halved text-[11px]"></i>
+              <span>Privacy Policy</span>
+            </a>
+            <button onclick="openModal('smartutility')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-dark-accent hover:bg-teal-600 hover:text-white text-teal-400 transition-all flex items-center space-x-1">
+              <span>Details</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </main>
 
-    <footer>
-      <p>Follow us: <a href="https://youtube.com">YouTube</a> • <a href="https://instagram.com">Instagram</a></p>
-      <p>Contact: <a href="mailto:kairolabs.official@gmail.com">kairolabs.official@gmail.com</a></p>
-      <p style="margin-top: 12px; font-size: 0.75rem;">&copy; 2026 Kairo App Labs. All rights reserved.</p>
-    </footer>
   </div>
+
+  <!-- Interactive Modal for App Details -->
+  <div id="appModal" class="fixed inset-0 z-50 modal-backdrop hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-dark-card border border-dark-border rounded-2xl max-w-lg w-full p-6 relative shadow-2xl transform scale-95 transition-transform duration-300" id="modalContainer">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-dark-bg flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="modalContent">
+        <!-- Content inserted dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-brand-600 text-white px-4 py-2.5 rounded-xl shadow-lg flex items-center space-x-2 text-sm font-medium">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Footer Section -->
+  <footer id="contact-section" class="relative z-10 border-t border-dark-border bg-dark-card/40 py-10 mt-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      
+      <div class="flex items-center justify-center space-x-2 mb-4">
+        <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white text-xs font-bold">K</div>
+        <span class="font-bold text-white text-lg tracking-tight">Kairo App Labs</span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-6">
+        Building intelligent, privacy-first software and edge computing solutions for modern mobile ecosystems.
+      </p>
+
+      <!-- Social Links & Contact -->
+      <div class="flex items-center justify-center space-x-4 mb-8">
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-dark-card border border-dark-border flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-500/50 transition-all">
+          <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-dark-card border border-dark-border flex items-center justify-center text-slate-400 hover:text-pink-500 hover:border-pink-500/50 transition-all">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="mailto:kairolabs.official@gmail.com" class="w-9 h-9 rounded-full bg-dark-card border border-dark-border flex items-center justify-center text-slate-400 hover:text-brand-400 hover:border-brand-500/50 transition-all" title="Email Us">
+          <i class="fa-solid fa-envelope"></i>
+        </a>
+      </div>
+
+      <div class="text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-center gap-2">
+        <span>&copy; 2026 Kairo App Labs. All rights reserved.</span>
+        <span class="hidden sm:inline">•</span>
+        <a href="mailto:kairolabs.official@gmail.com" class="hover:text-brand-400">kairolabs.official@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript logic -->
+  <script>
+    // Product data registry
+    const appDetails = {
+      kairo: {
+        title: "Kairo AI Assistant",
+        badge: "Launching March 2027",
+        badgeClass: "bg-brand-500/20 text-brand-400 border-brand-500/30",
+        subtitle: "Zero lag. Total privacy. Infinite power.",
+        description: "Kairo AI delivers lightning-fast responses, lock-screen voice interaction, and smart screen intelligence (Kairo Lens) right from your pocket. Powered by our Hybrid Engine (Edge Core + Cloud Boost), Kairo processes everyday commands locally on your device for zero-latency execution and military-grade privacy—seamlessly boosting to cloud intelligence when deep web research is required.",
+        features: ["Offline Edge Core LLM", "Kairo Lens Screen Analysis", "Lock-screen Voice Actions", "Apex HUD System Launcher"],
+        privacyLink: "kairo-privacy.html"
+      },
+      nyayshield: {
+        title: "Nyaya Shield",
+        badge: "Launching Early 2027",
+        badgeClass: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+        subtitle: "Your Personal Legal Safety & Emergency Shield.",
+        description: "Nyaya Shield is an all-in-one legal safety ecosystem providing instant offline emergency SOS alerts, one-tap call routing, verified lawyer and organization directories, and breaking legal updates powered by AI assistance.",
+        features: ["Instant Offline SOS Triggers", "Verified Legal Directory", "One-Tap Call Routing", "AI Legal Assistant"],
+        privacyLink: "nyayshield-privacy.html"
+      },
+      homework: {
+        title: "Homework Helper",
+        badge: "Coming Soon",
+        badgeClass: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30",
+        subtitle: "Smart Academic Management & Effortless Learning.",
+        description: "Homework Helper empowers students and teachers with structured assignment tracking, note organization, and seamless productivity tools designed to make study workflows fast, focused, and organized.",
+        features: ["Automated Study Timetables", "Step-by-step Problem Solver", "Note Organization Hub", "Assignment Tracking"],
+        privacyLink: "homework-privacy.html"
+      },
+      smartutility: {
+        title: "SmartUtilityApp",
+        badge: "Enterprise Utility",
+        badgeClass: "bg-teal-500/20 text-teal-400 border-teal-500/30",
+        subtitle: "Essential Tools & Smart Automation in One App.",
+        description: "SmartUtilityApp simplifies daily operational and digital tasks with a powerful suite of smart utilities, real-time backend alerts, and automated device tools engineered for maximum operational efficiency.",
+        features: ["Real-time Backend Alerts", "Multi-Tenant Auth", "Automated Workflows", "Device Diagnostic Utilities"],
+        privacyLink: "smartutility-privacy.html"
+      }
+    };
+
+    // Filter cards
+    function filterProducts(category) {
+      const cards = document.querySelectorAll('.product-card');
+      const tabs = document.querySelectorAll('.tab-btn');
+
+      tabs.forEach(tab => {
+        tab.classList.remove('bg-brand-600', 'text-white', 'shadow');
+        tab.classList.add('text-slate-400');
+      });
+
+      const activeTab = document.getElementById(`tab-${category}`);
+      if (activeTab) {
+        activeTab.classList.add('bg-brand-600', 'text-white', 'shadow');
+        activeTab.classList.remove('text-slate-400');
+      }
+
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Modal Handlers
+    function openModal(key) {
+      const data = appDetails[key];
+      if (!data) return;
+
+      const contentHtml = `
+        <div class="mb-4">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border ${data.badgeClass} mb-3">
+            ${data.badge}
+          </span>
+          <h3 class="text-2xl font-bold text-white mb-1">${data.title}</h3>
+          <p class="text-sm font-semibold text-brand-400 mb-4">${data.subtitle}</p>
+          <p class="text-sm text-slate-300 leading-relaxed mb-5">${data.description}</p>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2">Key Highlights</h4>
+          <div class="grid grid-cols-2 gap-2">
+            ${data.features.map(f => `
+              <div class="text-xs p-2 rounded-lg bg-dark-bg border border-dark-border text-slate-300 flex items-center space-x-1.5">
+                <i class="fa-solid fa-check text-brand-400 text-[10px]"></i>
+                <span>${f}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-dark-border">
+          <a href="${data.privacyLink}" class="text-xs font-semibold text-slate-400 hover:text-white flex items-center space-x-1">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Privacy Policy</span>
+          </a>
+          <button onclick="closeModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-semibold">
+            Close
+          </button>
+        </div>
+      `;
+
+      document.getElementById('modalContent').innerHTML = contentHtml;
+      const modal = document.getElementById('appModal');
+      const container = document.getElementById('modalContainer');
+      
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        container.classList.remove('scale-95');
+        container.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('appModal');
+      const container = document.getElementById('modalContainer');
+
+      modal.classList.add('opacity-0');
+      container.classList.remove('scale-100');
+      container.classList.add('scale-95');
+      
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    // Share website handler
+    function shareWebsite() {
+      const shareData = {
+        title: 'Kairo App Labs',
+        text: 'Zero lag. Total privacy. Infinite power. — Next-Generation Software & Edge AI Systems.',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+      } else {
+        // Fallback copy
+        const tempInput = document.createElement('input');
+        tempInput.value = window.location.href;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        showToast('Link copied to clipboard!');
+      }
+    }
+
+    // Toast Notice
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+      const modal = document.getElementById('appModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
 </body>
 </html>
